@@ -8,6 +8,7 @@ ENV PASSWORD password
 COPY src/ .
 
 RUN apk --no-cache --update add transmission-daemon shadow \
+    && groupmod -g 1000 transmission \
     && usermod -u 1000 transmission \
     && mkdir -p \
         /transmission/downloads \
