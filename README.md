@@ -1,17 +1,27 @@
-# Transmission on Alpine Linux
+Transmission in Docker
+======================
 
-Run the container:
+Installation
+------------
 
 ```sh
-$ docker build -t alpine-transmission:latest Dockerfile
+docker pull auditemarlow/transmission
+```
 
-$ docker run -d --name transmission \
--p 9091:9091 \
--p 51413:51413/tcp \
--p 51413:51413/udp \
--e "USERNAME=admin" \
--e "PASSWORD=password" \
--v /mnt/media:/transmission/downloads \
--v /mnt/media/incomplete:/transmission/incomplete \
-alpine-transmission
+Usage example
+-------------
+
+```sh
+$ docker run \
+    --rm \
+    --init \
+    --detach \
+    --publish 9091:9091 \
+    --publish 51413:51413/tcp \
+    --publish 51413:51413/udp \
+    --env "USERNAME=admin" \
+    --env "PASSWORD=password" \
+    --volume /mnt/media:/transmission/downloads \
+    --volume /mnt/media/incomplete:/transmission/incomplete \
+    auditemarlow/transmission
 ```
