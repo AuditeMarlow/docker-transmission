@@ -21,7 +21,7 @@ $ docker run \
     --publish 51413:51413/udp \
     --env "USERNAME=admin" \
     --env "PASSWORD=password" \
-    --volume /mnt/media:/transmission/downloads \
-    --volume /mnt/media/incomplete:/transmission/incomplete \
+    --volume /downloads:/transmission/downloads \
+    --volume /incomplete:/transmission/incomplete \
     auditemarlow/transmission
 ```
