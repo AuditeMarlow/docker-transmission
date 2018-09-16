@@ -1,24 +1,25 @@
-FROM alpine:3.7
+FROM alpine:3.8
 
 MAINTAINER "Audite Marlow <https://github.com/AuditeMarlow>"
-
-RUN apk --no-cache --update add transmission-daemon
-
-RUN mkdir -p /transmission/downloads \
-	&& mkdir -p /transmission/incomplete \
-	&& mkdir -p /etc/transmission-daemon
-
-COPY src/ .
-
-VOLUME ["/transmission/downloads"]
-VOLUME ["/transmission/incomplete"]
-VOLUME ["/etc/transmission-daemon"]
-
-EXPOSE 9091 51413/tcp 51413/udp
 
 ENV USERNAME admin
 ENV PASSWORD password
 
-RUN chmod +x /start-transmission.sh
+COPY src/ .
+
+RUN apk --no-cache --update add transmission-daemon shadow \
+    && usermod -u 1000 transmission \
+    && mkdir -p \
+        /transmission/downloads \
+        /transmission/incomplete \
+        /etc/transmission-daemon \
+        /var/lib/transmission-daemon \
+    && chown -R transmission:transmission /transmission \
+    && chown -R transmission:transmission /etc/transmission-daemon \
+    && chown -R transmission:transmission /var/lib/transmission-daemon
+
+EXPOSE 9091 51413/tcp 51413/udp
+
+USER transmission
 
 CMD ["/start-transmission.sh"]
